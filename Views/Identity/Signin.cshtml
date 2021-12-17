@@ -1,0 +1,43 @@
+﻿@model SigninViewModel
+@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<IdentityUser> signInManager
+
+@{
+    ViewData["Title"] = "Signin";
+    var providers = await signInManager.GetExternalAuthenticationSchemesAsync();
+}
+
+<form asp-action="SignIn" method="post">
+
+    @Html.ValidationSummary()
+
+    <div class="form-group col-4">
+        <label asp-for="Username"></label>
+        <input type="text" asp-for="Username" />
+    </div>
+
+    <div class="form-group col-4">
+        <label asp-for="Password"></label>
+        <input type="password" asp-for="Password" />
+    </div>
+    <div class="form-group col-4">
+        <input type="checkbox" asp-for="RememberMe" />Remember Me
+    </div>
+
+    <button type="submit" class="btn btn-primary">Sign In</button>
+</form>
+
+<p>
+    You can use your social media account to login as well.
+</p>
+
+<form asp-action="ExternalLogin" method="post">
+    <div class="form-group">
+
+        @foreach (var provider in providers)
+        {
+            <button type="submit" name="provider" value="@provider.Name" class="btn btn-primary">Login with @provider.DisplayName</button>
+        }
+    </div>
+</form>
+
